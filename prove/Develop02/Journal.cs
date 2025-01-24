@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Text.Json;
 
 public class Journal
 {
@@ -27,52 +27,36 @@ public class Journal
 
     public void SaveToFile(string filename)
     {
-        using (StreamWriter file = new StreamWriter(filename))
+        try
         {
-            foreach (var entry in _entries)
-            {
-                string escapedPrompt = EscapeForCsv(entry.Prompt);
-                string escapedResponse = EscapeForCsv(entry.Response);
-                file.WriteLine($"\"{entry.Date}\",\"{escapedPrompt}\",\"{escapedResponse}\"");
-            }
+            string json = JsonSerializer.Serialize(_entries, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(filename, json);
+            Console.WriteLine("Journal saved to JSON file.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving journal: {ex.Message}");
         }
     }
 
     public void LoadFromFile(string filename)
     {
-        _entries.Clear();
-        using (StreamReader file = new StreamReader(filename))
+        try
         {
-            string line;
-            while ((line = file.ReadLine()) != null)
+            if (File.Exists(filename))
             {
-                var parts = ParseCsvLine(line);
-                if (parts.Count == 3)
-                {
-                    AddEntry(new Entry(parts[1], parts[2], parts[0]));
-                }
+                string json = File.ReadAllText(filename);
+                _entries = JsonSerializer.Deserialize<List<Entry>>(json) ?? new List<Entry>();
+                Console.WriteLine("Journal loaded from JSON file.");
+            }
+            else
+            {
+                Console.WriteLine("File not found.");
             }
         }
-    }
-
-    private string EscapeForCsv(string input)
-    {
-        if (input.Contains("\""))
-            input = input.Replace("\"", "\"\"");
-        if (input.Contains(","))
-            return $"\"{input}\"";
-        return input;
-    }
-
-    private List<string> ParseCsvLine(string line)
-    {
-        var parts = new List<string>();
-        var regex = new Regex("\"(.*?)\"|([^,]+)");
-        MatchCollection matches = regex.Matches(line);
-        foreach (Match match in matches)
+        catch (Exception ex)
         {
-            parts.Add(match.Value.Trim('"'));
+            Console.WriteLine($"Error loading journal: {ex.Message}");
         }
-        return parts;
     }
 }

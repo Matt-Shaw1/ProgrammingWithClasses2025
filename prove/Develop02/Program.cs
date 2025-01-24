@@ -61,19 +61,18 @@ class Program
         journal.AddEntry(new Entry(prompt, response, date));
     }
 
-    static void SaveJournal()
-    {
-        Console.Write("Enter filename to save: ");
-        string filename = Console.ReadLine();
-        journal.SaveToFile(filename);
-        Console.WriteLine("Journal saved.");
-    }
+static void SaveJournal()
+{
+    Console.Write("Enter filename to save (ex.journal.json): ");
+    string filename = Console.ReadLine();
+    journal.SaveToFile(filename);
+}
 
-    static void LoadJournal()
-    {
-        Console.Write("Enter filename to load: ");
-        string filename = Console.ReadLine();
-        journal.LoadFromFile(filename);
-        Console.WriteLine("Journal loaded.");
-    }
+static void LoadJournal()
+{
+    Console.Write("Enter filename to load (ex. journal.json): ");
+    string filename = Console.ReadLine();
+    journal.LoadFromFile(filename);
+}
+
 }
