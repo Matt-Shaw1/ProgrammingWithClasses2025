@@ -1,7 +1,7 @@
 
 // I have exceeded the requirements by adding some features.
 // I maade it so Users can dynamically create goals instead of using hardcoded ones
-// I made a leveling system where users progress through ranks (Novice → Warrior → Master → Legend) based on the points.
+// I made a leveling system where users progress through ranks (Novice - Warrior - Master - Legend) based on the points.
 // I added "negative goals" or bad habits so users can do that if they want and it tracks bad habits and deducts points
 
 
