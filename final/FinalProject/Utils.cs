@@ -1,6 +1,5 @@
 using System;
-
-public static class Utils
+class Utils
 {
     public static DateTime ParseDate(string dateStr)
     {

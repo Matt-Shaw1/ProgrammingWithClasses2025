@@ -1,52 +1,56 @@
 using System;
 using System.Collections.Generic;
 
-public class User
+class User
 {
-    public string Username { get; }
-    public List<Task> Tasks { get; }
-    public int Points { get; private set; }
-    public int Level { get; private set; }
+    private string _username;
+    private List<BaseTask> _tasks;
+    private int _points;
+    private int _level;
 
     public User(string username)
     {
-        Username = username;
-        Tasks = new List<Task>();
-        Points = 0;
-        Level = 1;
+        _username = username;
+        _tasks = new List<BaseTask>();
+        _points = 0;
+        _level = 1;
     }
 
-    public void AddTask(Task task)
-    {
-        Tasks.Add(task);
-    }
-
-    public void DeleteTask(string title)
-    {
-        Tasks.RemoveAll(t => t.Title.Equals(title, StringComparison.OrdinalIgnoreCase));
-    }
+    public void AddTask(BaseTask task) => _tasks.Add(task);
 
     public void CompleteTask(string title)
     {
-        foreach (var task in Tasks)
+        foreach (var task in _tasks)
         {
-            if (task.Title.Equals(title, StringComparison.OrdinalIgnoreCase) && !task.Completed)
+            if (task.Title == title && !task.Completed)
             {
                 task.MarkCompleted();
-                Points += 10;
+                _points += 10;
                 CheckLevelUp();
-                break;
+                Console.WriteLine($"{title} completed!");
+                return;
             }
         }
+        Console.WriteLine("Task not found.");
     }
 
     private void CheckLevelUp()
     {
-        while (Points >= 100)
+        if (_points >= 100)
         {
-            Level++;
-            Points -= 100;
-            Console.WriteLine($" Congrats! You've reached level {Level}! ");
+            _level++;
+            _points -= 100;
+            Console.WriteLine($"Leveled up! New level: {_level}");
         }
+    }
+
+    public int Level => _level;
+
+    public int CompletedTaskCount => _tasks.FindAll(t => t.Completed).Count;
+
+    public void ShowTasks()
+    {
+        foreach (var task in _tasks)
+            task.DisplayDetails();
     }
 }

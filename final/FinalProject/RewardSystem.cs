@@ -1,27 +1,31 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
-public class RewardSystem
+class RewardSystem
 {
-    public HashSet<string> Achievements { get; }
+    private List<Achievement> _achievements;
+    private User _user;
 
-    public RewardSystem()
+    public RewardSystem(User user)
     {
-        Achievements = new HashSet<string>();
+        _user = user;
+        _achievements = new List<Achievement>
+        {
+            new Achievement("Level 2 Achiever", "Reach Level 2"),
+            new Achievement("Task Master", "Complete 5 Tasks")
+        };
     }
 
-    public void CheckRewards(User user)
+    public void CheckAchievements()
     {
-        if (user.Level >= 2 && Achievements.Add("Level 2 Achiever"))
+        foreach (var ach in _achievements)
         {
-            Console.WriteLine(" Achievement Unlocked: Level 2 Achiever");
-        }
-
-        int completedTasks = user.Tasks.Count(t => t.Completed);
-        if (completedTasks >= 5 && Achievements.Add("Task Master"))
-        {
-            Console.WriteLine(" Achievement Unlocked: Task Master (Completed 5 tasks)");
+            if (!ach.Unlocked)
+            {
+                if (ach.Name == "Level 2 Achiever" && _user.Level >= 2)
+                    ach.Unlock();
+                else if (ach.Name == "Task Master" && _user.CompletedTaskCount >= 5)
+                    ach.Unlock();
+            }
         }
     }
 }
