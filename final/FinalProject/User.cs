@@ -46,7 +46,7 @@ public class User
         {
             Level++;
             Points -= 100;
-            Console.WriteLine($"✨ Congrats! You've reached level {Level}! ✨");
+            Console.WriteLine($" Congrats! You've reached level {Level}! ");
         }
     }
 }

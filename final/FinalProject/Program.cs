@@ -62,7 +62,7 @@ class Program
                             string.IsNullOrWhiteSpace(newPriority) ? null : newPriority,
                             string.IsNullOrWhiteSpace(newDeadline) ? (DateTime?)null : Utils.ParseDate(newDeadline)
                         );
-                        Console.WriteLine($"Task '{editTitle}' updated.");
+                        Console.WriteLine($"Task '{editTitle}' Updated.");
                     }
                     else
                     {
